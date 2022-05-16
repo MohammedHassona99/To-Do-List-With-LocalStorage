@@ -1,7 +1,12 @@
 let input = document.querySelector(".input");
 let submit = document.querySelector(".add");
 let tasksDiv = document.querySelector(".tasks");
+let deleteButton = document.querySelector(".delete-all");
 
+deleteButton.onclick = function () {
+  tasksDiv.innerHTML = "";
+  window.localStorage.removeItem("tasks");
+};
 // Empty Array To Store The Tasks
 let arrayOfTasks = [];
 // Check if there tasks in local storage
@@ -21,12 +26,18 @@ submit.onclick = function () {
 // Click On Task Element
 tasksDiv.addEventListener("click", (e) => {
   // Delete Button
-
   if (e.target.classList.contains("del")) {
     // Remove Task From Local Storage
     deleteTaskWith(e.target.parentElement.getAttribute("data-id"));
     // Remove Element From Page
     e.target.parentElement.remove();
+  }
+  // Task Element
+  if (e.target.classList.contains("task")) {
+    // Toggle Completed For The Task
+    toggleStatusTaskWith(e.target.getAttribute("data-id"));
+    // Toggle Done Class
+    e.target.classList.toggle("done");
   }
 });
 
@@ -89,5 +100,16 @@ function deleteTaskWith(taskId) {
   arrayOfTasks = arrayOfTasks.filter((task) => {
     task.id != taskId;
   });
+  addDataToLocalStorageFrom(arrayOfTasks);
+}
+
+function toggleStatusTaskWith(taskId) {
+  for (let i = 0; i < arrayOfTasks.length; i++) {
+    if (arrayOfTasks[i].id == taskId) {
+      arrayOfTasks[i].completed == false
+        ? (arrayOfTasks[i].completed = true)
+        : arrayOfTasks[i].completed == false;
+    }
+  }
   addDataToLocalStorageFrom(arrayOfTasks);
 }
